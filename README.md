@@ -1,0 +1,1 @@
+Fork this repo on your account, and then clone that forked repo on your computer. Do all the work on the cloned one, and then make Pull request to merge with the main repo.

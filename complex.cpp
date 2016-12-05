@@ -59,7 +59,7 @@ complex::complex()
 double complex::norm()
 {
 	/* TODO: write this */
-	return 0;
+	return sqrt(real*real + imag*imag);
 }
 
 complex operator+(const complex& w, const complex& z)
@@ -76,23 +76,37 @@ complex operator-(const complex& w)
 {
 	/* TODO: write this */
 	/* NOTE: this is unary negation, not subtraction. */
+	complex retVal;
+	retVal.real = -w.real;
+	retVal.imag = -w.imag;
+	return retVal;
 }
 
 complex operator-(const complex& w, const complex& z)
 {
 	/* TODO: write this */
+	return (w+(-z));
 }
 
 complex operator*(const complex& w, const complex& z)
 {
 	/* TODO: write this */
-	return complex();
+	complex ret_val;
+	ret_val.real = (w.real*w.real)-(z.real*z.real);
+	ret_val.imag = 2*w.imag*z.imag;
+	return ret_val;
+//	return complex();
 }
 
 complex operator/(complex& w, complex& z)
 {
 	/* TODO: write this */
-	return complex();
+	int a = w.real; int b = w.imag; int c = z.real; int d = z.imag;
+	complex ret_val;
+	ret_val.real = ((a*c)+(b*d))/((c*c)+(d*d));
+	ret_val.imag = (b-d)/((c*c)+(d*d));
+	return ret_val;
+//	return complex();
 }
 
 complex operator^(const complex& w, int a)

@@ -133,10 +133,29 @@ void mandelbrotArea::render()
 	unsigned long iheight = image.height();
 	double unit = 1.0 / iwidth; // on a scale of 0-1, how wide is a pixel?
 	for (unsigned long i = 0; i < iwidth; i++) {
-		qc.setRgbF(i*unit,sqrt(i*unit),i*unit); // set the color we want to draw.
-		qpen.setColor(qc); // apply the color to the pen
-		qp.setPen(qpen);   // set the painter to use that pen
-		qp.drawLine(i,0,i,iheight); // draw a line of the specified color.
+		double x_real = ((unit*i)-2);
+		for (unsigned long j = 0; j < iheight; j++) {
+			double y_imag = (-(unitY*j)+1.5);
+			complex* point = new complex(x_real,y_imag);
+			complex* cons = new complex(x_real,y_imag);		
+			bool inSet = true;
+			for(unsigned n = 0; n<30; n++){
+				if (point->norm()>2) {
+					inSet = false; 
+					qc.setRgbF(i*unit,sqrt(i*unit),i*unit); // set the color we want to draw.
+					break ; }
+				//*point = ((*point)*(*point))+(*cons);	
+				double oldReal = point->real; double oldImag = point->imag ;
+				point->real = ((oldReal*oldReal))-(oldImag*oldImag)+(cons->real);
+				point->imag = (2.0*(oldImag*oldReal)+(cons->imag));			
+			}
+			if(inSet){
+				qc.setRgbF(0,0,0);
+			}
+			qpen.setColor(qc); // apply the color to the pen
+			qp.setPen(qpen);   // set the painter to use that pen
+			qp.drawLine(i,0,i,iheight); // draw a line of the specified color.
+		}
 	}
 	update(); // repaint screen contents
 	return;

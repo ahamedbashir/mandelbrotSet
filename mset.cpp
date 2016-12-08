@@ -132,6 +132,7 @@ void mandelbrotArea::render()
 	unsigned long iwidth = image.width();
 	unsigned long iheight = image.height();
 	double unit = 1.0 / iwidth; // on a scale of 0-1, how wide is a pixel?
+	double unitY = 1.0 / iheight;
 	for (unsigned long i = 0; i < iwidth; i++) {
 		double x_real = ((unit*i)-2);
 		for (unsigned long j = 0; j < iheight; j++) {

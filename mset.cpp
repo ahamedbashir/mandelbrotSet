@@ -72,6 +72,17 @@ void mandelbrotArea::mouseDoubleClickEvent(QMouseEvent *event)
 	// the mouse button from event->button() and check for 
 	// event->button() == Qt::LeftButton, etc. to figure out what
 	// button is being pressed.
+	QImage visibleImage = image;
+	if(event->button() == Qt::LeftButton){
+	cout << "left double click" << endl;
+	resizeImage(&visibleImage, (size()/2));
+	}
+	else if(event->button() == Qt::RightButton){
+	cout << "right double click"<<endl;
+	resizeImage(&visibleImage, (size()/2));
+	}
+	update();
+	return;
 }
 
 void mandelbrotArea::mousePressEvent(QMouseEvent *event)
@@ -131,31 +142,31 @@ void mandelbrotArea::render()
 	// get the dimensions of our image in terms of pixels:
 	unsigned long iwidth = image.width();
 	unsigned long iheight = image.height();
-	double unit = 1.0 / iwidth; // on a scale of 0-1, how wide is a pixel?
-	double unitY = 1.0 / iheight;
+	double unitX = 3.0 / iwidth; // on a scale of 0-1, how wide is a pixel?
+	double unitY = 3.0 / iheight;
 	for (unsigned long i = 0; i < iwidth; i++) {
-		double x_real = ((unit*i)-2);
+		double x_real = ((unitX*i)-2);
 		for (unsigned long j = 0; j < iheight; j++) {
 			double y_imag = (-(unitY*j)+1.5);
 			complex* point = new complex(x_real,y_imag);
 			complex* cons = new complex(x_real,y_imag);		
 			bool inSet = true;
-			for(unsigned n = 0; n<30; n++){
-				if (point->norm()>2) {
+			for( unsigned n = 0; n < 30; n++ ) {
+				if ( point->norm() > 2 ) {
 					inSet = false; 
-					qc.setRgbF(i*unit,sqrt(i*unit),i*unit); // set the color we want to draw.
-					break ; }
-				//*point = ((*point)*(*point))+(*cons);	
+					qc.setRgbF(n*unitX,sqrt(n*unitX),n*unitX); // set the color we want to draw.
+					break;
+					}
 				double oldReal = point->real; double oldImag = point->imag ;
 				point->real = ((oldReal*oldReal))-(oldImag*oldImag)+(cons->real);
 				point->imag = (2.0*(oldImag*oldReal)+(cons->imag));			
 			}
-			if(inSet){
+			if(inSet)
 				qc.setRgbF(0,0,0);
-			}
+
 			qpen.setColor(qc); // apply the color to the pen
 			qp.setPen(qpen);   // set the painter to use that pen
-			qp.drawLine(i,0,i,iheight); // draw a line of the specified color.
+			qp.drawPoint(i,j); // draw a line of the specified color.
 		}
 	}
 	update(); // repaint screen contents
